@@ -28,7 +28,6 @@ const navigationData = {
     { name: "İletişim", href: "/iletisim" },
   ],
   cta: {
-    appointment: "Randevu Al",
     login: "Giriş Yap",
   },
 }
@@ -72,13 +71,6 @@ export default function Header() {
               <Link href="tel:+902125550123">
                 <Phone className="w-4 h-4 mr-2" />
                 {navigationData.phone}
-              </Link>
-            </Button>
-
-            <Button size="sm" asChild>
-              <Link href="/randevu">
-                <Calendar className="w-4 h-4 mr-2" />
-                {navigationData.cta.appointment}
               </Link>
             </Button>
 

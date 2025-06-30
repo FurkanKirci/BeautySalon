@@ -19,7 +19,6 @@ const navigationData = {
   ],
   phone: "+90 212 555 0123",
   cta: {
-    appointment: "Randevu Al",
     login: "Giriş Yap",
   },
 }
@@ -45,7 +44,7 @@ export function MobileNav() {
       {/* Mobile Menu Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-50 bg-black/50 transition-opacity lg:hidden",
+          "fixed inset-0 z-50 bg-black transition-opacity lg:hidden",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={() => setIsOpen(false)}
@@ -65,7 +64,7 @@ export function MobileNav() {
           </Button>
         </div>
 
-        <div className="flex flex-col p-4 space-y-4">
+        <div className="flex flex-col p-4 space-y-4 bg-white dark:bg-black">
           {navigationData.navigation.map((item) => (
             <Link
               key={item.name}
@@ -78,12 +77,6 @@ export function MobileNav() {
           ))}
 
           <div className="border-t pt-4 space-y-4">
-            <Button className="w-full" asChild>
-              <Link href="/randevu" onClick={() => setIsOpen(false)}>
-                <Calendar className="w-4 h-4 mr-2" />
-                {navigationData.cta.appointment}
-              </Link>
-            </Button>
 
             {user ? (
               <>

@@ -4,17 +4,39 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Users, MessageSquare, Star, Clock, Phone, Mail } from "lucide-react"
+import { Calendar, Users, MessageSquare, Star, Clock, Phone, Mail, Image as ImageIcon } from "lucide-react"
 import Link from "next/link"
 import { getDashboardStats } from "@/lib/actions/dashboard"
 import { getRecentAppointments } from "@/lib/actions/appointments"
 import { getRecentMessages } from "@/lib/actions/contact"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { ImageUpload } from "@/components/image-upload"
+
+const GALLERY_CATEGORIES = [
+  "Saç Tasarımları",
+  "Makyaj Çalışmaları",
+  "Cilt Bakımı",
+  "Salon Atmosferi",
+]
 
 export default function DashboardPage() {
   const [stats, setStats] = useState(null)
   const [recentAppointments, setRecentAppointments] = useState([])
   const [recentMessages, setRecentMessages] = useState([])
   const [loading, setLoading] = useState(true)
+
+  // Galeri ekleme modalı için state
+  const [galleryModalOpen, setGalleryModalOpen] = useState(false)
+  const [galleryImages, setGalleryImages] = useState([])
+  const [galleryForm, setGalleryForm] = useState({
+    category: GALLERY_CATEGORIES[0],
+    title: "",
+    description: "",
+    image: null,
+  })
+  const [galleryFormLoading, setGalleryFormLoading] = useState(false)
 
   useEffect(() => {
     const loadDashboardData = async () => {
@@ -38,6 +60,39 @@ export default function DashboardPage() {
     loadDashboardData()
   }, [])
 
+  const handleGalleryFormChange = (e) => {
+    const { name, value } = e.target
+    setGalleryForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleGalleryImageSave = (file) => {
+    setGalleryForm((prev) => ({ ...prev, image: file }))
+  }
+
+  const handleGalleryFormSubmit = async (e) => {
+    e.preventDefault()
+    setGalleryFormLoading(true)
+    // Burada backend'e gönderme işlemi yapılabilir
+    setTimeout(() => {
+      setGalleryImages((prev) => [
+        {
+          ...galleryForm,
+          id: Date.now(),
+          imageUrl: galleryForm.image ? URL.createObjectURL(galleryForm.image) : null,
+        },
+        ...prev,
+      ])
+      setGalleryForm({
+        category: GALLERY_CATEGORIES[0],
+        title: "",
+        description: "",
+        image: null,
+      })
+      setGalleryModalOpen(false)
+      setGalleryFormLoading(false)
+    }, 1000)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen py-20">
@@ -55,64 +110,89 @@ export default function DashboardPage() {
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Salon yönetim paneline hoş geldiniz</p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
+            <p className="text-muted-foreground">Salon yönetim paneline hoş geldiniz</p>
+          </div>
         </div>
 
+        {/* Galeriye eklenen fotoğraflar */}
+        {galleryImages.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4">Galeri (Yeni Eklenenler)</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {galleryImages.map((img) => (
+                <Card key={img.id} className="overflow-hidden">
+                  <CardContent className="p-0">
+                    {img.imageUrl && (
+                      <img src={img.imageUrl} alt={img.title} className="w-full h-48 object-cover" />
+                    )}
+                    <div className="p-4">
+                      <h3 className="font-semibold text-lg mb-1">{img.title}</h3>
+                      <p className="text-sm text-muted-foreground mb-2">{img.description}</p>
+                      <Badge variant="secondary">{img.category}</Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <Card className="bg-black dark:bg-white">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Toplam Randevu</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-white dark:text-black">Toplam Galeri</CardTitle>
+              <ImageIcon className="h-4 w-4 text-gray-400 dark:text-gray-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.totalAppointments || 0}</div>
-              <p className="text-xs text-muted-foreground">+{stats?.newAppointmentsThisMonth || 0} bu ay</p>
+              <div className="text-2xl font-bold text-white dark:text-black">{stats?.totalGallery || 0}</div>
+              <p className="text-xs text-gray-400 dark:text-gray-600">Toplam galeri fotoğrafı</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-black dark:bg-white">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Aktif Hizmetler</CardTitle>
-              <Star className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-white dark:text-black">Aktif Hizmetler</CardTitle>
+              <Star className="h-4 w-4 text-gray-400 dark:text-gray-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.totalServices || 0}</div>
-              <p className="text-xs text-muted-foreground">Toplam hizmet sayısı</p>
+              <div className="text-2xl font-bold text-white dark:text-black">{stats?.totalServices || 0}</div>
+              <p className="text-xs text-gray-400 dark:text-gray-600">Toplam hizmet sayısı</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-black dark:bg-white">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Uzmanlar</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-white dark:text-black">Uzmanlar</CardTitle>
+              <Users className="h-4 w-4 text-gray-400 dark:text-gray-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.totalSpecialists || 0}</div>
-              <p className="text-xs text-muted-foreground">Aktif uzman sayısı</p>
+              <div className="text-2xl font-bold text-white dark:text-black">{stats?.totalSpecialists || 0}</div>
+              <p className="text-xs text-gray-400 dark:text-gray-600">Aktif uzman sayısı</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-black dark:bg-white">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Mesajlar</CardTitle>
-              <MessageSquare className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-white dark:text-black">Mesajlar</CardTitle>
+              <MessageSquare className="h-4 w-4 text-gray-400 dark:text-gray-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.totalMessages || 0}</div>
-              <p className="text-xs text-muted-foreground">+{stats?.newMessagesThisWeek || 0} bu hafta</p>
+              <div className="text-2xl font-bold text-white dark:text-black">{stats?.totalMessages || 0}</div>
+              <p className="text-xs text-gray-400 dark:text-gray-600">+{stats?.newMessagesThisWeek || 0} bu hafta</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Button asChild className="h-auto p-4">
-            <Link href="/dashboard/appointments" className="flex flex-col items-center gap-2">
-              <Calendar className="h-6 w-6" />
-              <span>Randevular</span>
+          <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
+            <Link href="/galeri" className="flex flex-col items-center gap-2">
+              <ImageIcon className="h-6 w-6" />
+              <span>Galeri</span>
             </Link>
           </Button>
 
@@ -139,60 +219,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Recent Appointments */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Son Randevular</CardTitle>
-              <CardDescription>En son alınan randevular</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentAppointments.map((appointment) => (
-                  <div key={appointment._id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">
-                        {appointment.firstName} {appointment.lastName}
-                      </p>
-                      <p className="text-sm text-muted-foreground">{appointment.service_name}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        {new Date(appointment.appointmentDate).toLocaleDateString("tr-TR")}
-                        <Clock className="h-3 w-3 ml-2" />
-                        {appointment.appointmentTime}
-                      </div>
-                    </div>
-                    <Badge
-                      variant={
-                        appointment.status === "confirmed"
-                          ? "default"
-                          : appointment.status === "pending"
-                            ? "secondary"
-                            : appointment.status === "completed"
-                              ? "outline"
-                              : "destructive"
-                      }
-                    >
-                      {appointment.status === "confirmed"
-                        ? "Onaylandı"
-                        : appointment.status === "pending"
-                          ? "Bekliyor"
-                          : appointment.status === "completed"
-                            ? "Tamamlandı"
-                            : "İptal"}
-                    </Badge>
-                  </div>
-                ))}
-                {recentAppointments.length === 0 && (
-                  <p className="text-center text-muted-foreground py-4">Henüz randevu bulunmuyor</p>
-                )}
-              </div>
-              <div className="mt-4">
-                <Button asChild variant="outline" className="w-full bg-transparent">
-                  <Link href="/dashboard/appointments">Tüm Randevuları Görüntüle</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+
 
           {/* Recent Messages */}
           <Card>

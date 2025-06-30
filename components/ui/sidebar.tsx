@@ -35,7 +35,7 @@ type SidebarContext = {
   isMobile: boolean
   toggleSidebar: () => void
 }
-
+const [width, setWidth] = React.useState("0%");
 const SidebarContext = React.createContext<SidebarContext | null>(null)
 
 function useSidebar() {
@@ -652,7 +652,7 @@ const SidebarMenuSkeleton = React.forwardRef<
 >(({ className, showIcon = false, ...props }, ref) => {
   // Random width between 50 to 90%.
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
+    setWidth(`${Math.floor(Math.random() * 40) + 50}%`)
   }, [])
 
   return (
