@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Edit, Trash2, Clock, DollarSign } from "lucide-react"
 import { getServices, createService, updateService, deleteService } from "@/lib/actions/services"
+import { getSettings } from "@/lib/actions/settings"
 import { ImageUpload } from "@/components/image-upload"
 import ServiceImage from "@/components/ui/service-image"
 import Image from "next/image"
@@ -28,11 +29,15 @@ export default function ServicesPage() {
   })
   const [imageFile, setImageFile] = useState(null)
   const [currentImage, setCurrentImage] = useState(null)
-
-  const categories = ["Cilt Bakımı", "Saç Bakımı", "Makyaj", "Tırnak Bakımı", "Masaj", "Diğer"]
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     loadServices()
+    async function fetchCategories() {
+      const settings = await getSettings()
+      setCategories(settings?.serviceCategories || [])
+    }
+    fetchCategories()
   }, [])
 
   const loadServices = async () => {

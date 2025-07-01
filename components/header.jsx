@@ -1,6 +1,8 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Phone, Calendar, User, LogOut } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -15,11 +17,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { getCompanyInfo } from "@/lib/actions/settings"
 
-// JSON Data for Navigation
+// Static navigation data
 const navigationData = {
-  logo: "Güzellik Salonu",
-  phone: "+90 212 555 0123",
   navigation: [
     { name: "Ana Sayfa", href: "/" },
     { name: "Hizmetler", href: "/hizmetler" },
@@ -34,6 +35,23 @@ const navigationData = {
 
 export default function Header() {
   const { user, logout } = useAuth()
+  const [companyInfo, setCompanyInfo] = useState({
+    name: "Güzellik Salonu",
+    phone: "+90 212 555 0123",
+    image: "",
+  })
+
+  useEffect(() => {
+    const loadCompanyInfo = async () => {
+      try {
+        const info = await getCompanyInfo()
+        setCompanyInfo(info)
+      } catch (error) {
+        console.error("Company info loading error:", error)
+      }
+    }
+    loadCompanyInfo()
+  }, [])
 
   const handleLogout = () => {
     logout()
@@ -47,8 +65,18 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-full"></div>
-            <span className="font-bold text-xl">{navigationData.logo}</span>
+            {companyInfo.image ? (
+              <Image
+              src={companyInfo.image ? `/api/company-icon/${companyInfo.image.replace(/\.(png|jpeg)$/i, '')}` : "/placeholder.svg"}
+              alt={companyInfo.name}
+              width={32}
+              height={32}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+            ) : (
+              <div className="w-8 h-8 bg-primary rounded-full"></div>
+            )}
+            <span className="font-bold text-xl">{companyInfo.name}</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -68,53 +96,58 @@ export default function Header() {
           <div className="hidden lg:flex items-center space-x-4">
             <ThemeToggle />
             <Button variant="ghost" size="sm" asChild>
-              <Link href="tel:+902125550123">
+              <Link href={`tel:${companyInfo.phone.replace(/\s/g, "")}`}>
                 <Phone className="w-4 h-4 mr-2" />
-                {navigationData.phone}
+                {companyInfo.phone}
               </Link>
             </Button>
 
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                    <Avatar className="w-6 h-6">
-                      <AvatarFallback className="text-xs">
-                        {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="hidden sm:inline">
-                      {user.firstName} {user.lastName}
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Hesabım</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2">
-                    <LogOut className="w-4 h-4" />
-                    Çıkış Yap
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                      <Avatar className="w-6 h-6">
+                        <AvatarFallback className="text-xs">
+                          {user.firstName?.charAt(0)}
+                          {user.lastName?.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="hidden sm:inline">
+                        {user.firstName} {user.lastName}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Hesabım</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2">
+                      <LogOut className="w-4 h-4" />
+                      Çıkış Yap
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/login">{navigationData.cta.login}</Link>
-              </Button>
+              <>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/login">{navigationData.cta.login}</Link>
+                </Button>
+              </>
             )}
           </div>
 
           {/* Mobile Menu */}
           <div className="lg:hidden flex items-center space-x-2">
             <ThemeToggle />
-            <MobileNav />
+            <MobileNav companyInfo={companyInfo} user={user} onLogout={handleLogout} />
           </div>
         </div>
       </div>

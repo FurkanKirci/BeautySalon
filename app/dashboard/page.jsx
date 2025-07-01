@@ -4,15 +4,11 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Users, MessageSquare, Star, Clock, Phone, Mail, Image as ImageIcon } from "lucide-react"
+import { Settings, Users, MessageSquare, Star, Phone, Mail, Image as ImageIcon } from "lucide-react"
 import Link from "next/link"
 import { getDashboardStats } from "@/lib/actions/dashboard"
-import { getRecentAppointments } from "@/lib/actions/appointments"
 import { getRecentMessages } from "@/lib/actions/contact"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { ImageUpload } from "@/components/image-upload"
+
 
 const GALLERY_CATEGORIES = [
   "Saç Tasarımları",
@@ -23,7 +19,6 @@ const GALLERY_CATEGORIES = [
 
 export default function DashboardPage() {
   const [stats, setStats] = useState(null)
-  const [recentAppointments, setRecentAppointments] = useState([])
   const [recentMessages, setRecentMessages] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -41,14 +36,12 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        const [statsData, appointmentsData, messagesData] = await Promise.all([
+        const [statsData, messagesData] = await Promise.all([
           getDashboardStats(),
-          getRecentAppointments(),
           getRecentMessages(),
         ])
 
         setStats(statsData)
-        setRecentAppointments(appointmentsData)
         setRecentMessages(messagesData)
       } catch (error) {
         console.error("Dashboard data loading error:", error)
@@ -190,7 +183,7 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
-            <Link href="/galeri" className="flex flex-col items-center gap-2">
+            <Link href="/dashboard/gallery" className="flex flex-col items-center gap-2">
               <ImageIcon className="h-6 w-6" />
               <span>Galeri</span>
             </Link>
@@ -211,9 +204,9 @@ export default function DashboardPage() {
           </Button>
 
           <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
-            <Link href="/dashboard/messages" className="flex flex-col items-center gap-2">
-              <MessageSquare className="h-6 w-6" />
-              <span>Mesajlar</span>
+            <Link href="/dashboard/general" className="flex flex-col items-center gap-2">
+              <Settings className="h-6 w-6" />
+              <span>Ayarlar</span>
             </Link>
           </Button>
         </div>
