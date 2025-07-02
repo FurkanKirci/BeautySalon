@@ -28,7 +28,7 @@ export default function GalleryDashboardPage() {
   const [editingImage, setEditingImage] = useState(null)
   const [currentImage, setCurrentImage] = useState(null)
   const [imageFile, setImageFile] = useState(null)
-  const [imageVersion, setImageVersion] = useState(Date.now())
+  const [imageVersion, setImageVersion] = useState(0)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -80,7 +80,7 @@ export default function GalleryDashboardPage() {
 
       // Daha uzun bir gecikme ve force reload
       setTimeout(async () => {
-        setImageVersion(Date.now()) // Force image refresh
+        setImageVersion(prev => prev + 1) // Force image refresh with increment
         await loadGallery()
         resetForm()
       }, 500)
@@ -91,6 +91,13 @@ export default function GalleryDashboardPage() {
 
   const handleEdit = (image) => {
     setEditingImage(image)
+    console.log(image)
+    if (image.picture) {
+      const imageUrl = `/api/gallery/${image._id}?v=${image._id}`
+      setCurrentImage(imageUrl)
+    } else {
+      setCurrentImage(null)
+    }
     setFormData({
       title: image.title,
       description: image.description || "",
@@ -108,15 +115,6 @@ export default function GalleryDashboardPage() {
       } catch (error) {
         console.error("Gallery delete error:", error)
       }
-    }
-  }
-
-  const handleToggleFeatured = async (imageId, currentFeatured) => {
-    try {
-      await toggleFeaturedImage(imageId, !currentFeatured)
-      await loadGallery()
-    } catch (error) {
-      console.error("Toggle featured error:", error)
     }
   }
 
@@ -238,7 +236,7 @@ export default function GalleryDashboardPage() {
                 <div className="relative">
                   <Image
                     key={`${image._id}-${image.picture}-${imageVersion}`}
-                    src={`/api/gallery/${image.picture}?v=${imageVersion}` || "/placeholder.svg"}
+                    src={`/api/gallery/${image._id}?v=${imageVersion}` || "/placeholder.svg"}
                     alt={image.title}
                     width={300}
                     height={400}

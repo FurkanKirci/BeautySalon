@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -7,9 +8,8 @@ import NextImage from "next/image"
 import Image from "next/image"
 import ServiceImage from "@/components/ui/service-image"
 import { getServices } from "@/lib/actions/services"
-
-// Force dynamic rendering to avoid build-time database calls
-export const dynamic = 'force-dynamic'
+import { getCompanyInfo } from "@/lib/actions/settings"
+import { useEffect, useState } from "react"
 
 // Static data that doesn't change often
 const heroData = {
@@ -52,24 +52,65 @@ const statsData = [
   { label: "Hizmet Çeşidi", value: "25+" },
 ]
 
-export default async function HomePage() {
-  // Get services from database with error handling
-  let services = []
-  try {
-    services = await getServices()
-    console.log("Homepage services loaded:", services) // Bu console.log server-side'da çalışacak
-  } catch (error) {
-    console.error("Error loading services:", error)
-    // Return empty array if database is not available
-    services = []
-  }
+export default function HomePage() {
+  const [services, setServices] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [companyInfo, setCompanyInfo] = useState({
+    name: "Güzellik Salonu",
+    phone: "+90 212 555 0123",
+    image: "",
+  })
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // Load services
+        const servicesData = await getServices()
+        console.log("Homepage services loaded:", servicesData)
+        setServices(servicesData)
+        
+        // Load company info
+        const info = await getCompanyInfo()
+        setCompanyInfo(info)
+      } catch (error) {
+        console.error("Data loading error:", error)
+        // Set empty array if database is not available
+        setServices([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    loadData()
+  }, [])
 
   const featuredServices = services.slice(0, 4) // Show first 4 services
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Yükleniyor...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-background via-background to-muted py-20 lg:py-32">
+      <section className="relative bg-gradient-to-br from-background via-background to-muted py-20 lg:py-8">
+        <div className="flex justify-center items-center mb-10">
+          <Image
+            src="/cankayaLogo.jpg"
+            alt="Güzellik Salonu"
+            width={500}
+            height={600}
+            className="rounded-2xl shadow-2xl scale-down"
+          />
+        </div>
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
@@ -92,7 +133,7 @@ export default async function HomePage() {
             </div>
             <div className="relative">
               <NextImage
-                src="/placeholder.svg?height=600&width=500"
+                src="/cankayaMain.jpg"
                 alt="Güzellik Salonu"
                 width={500}
                 height={600}
@@ -128,7 +169,7 @@ export default async function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredServices.map((service, index) => (
-              <Card key={service.id} className="group hover:shadow-lg transition-shadow">
+              <Card key={service._id} className="group hover:shadow-lg transition-shadow">
                 <CardHeader className="p-0">
                   {service.image ? (
                     <ServiceImage
@@ -157,7 +198,7 @@ export default async function HomePage() {
                     <div className="font-semibold text-primary">₺{service.price}</div>
                   </div>
                   <Button className="w-full" asChild>
-                    <Link href="/randevu">Randevu Al</Link>
+                    <Link href={`tel:${companyInfo.phone.replace(/\s/g, "")}`}>Randevu Al</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -201,9 +242,6 @@ export default async function HomePage() {
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Randevunuzu Hemen Alın</h2>
             <p className="text-xl mb-8 opacity-90">Size özel güzellik deneyimi için bugün randevu alın</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="text-lg px-8">
-                <Link href="/randevu">Online Randevu</Link>
-              </Button>
               <Button
                 asChild
                 size="lg"

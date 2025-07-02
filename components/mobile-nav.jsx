@@ -57,23 +57,27 @@ export function MobileNav({ companyInfo, user, onLogout }) {
           <div className="flex items-center space-x-2">
             {companyInfo?.image ? (
               <Image
-              src={companyInfo.image ? `/api/company-icon/${companyInfo.image.replace(/\.(png|jpeg)$/i, '')}` : "/placeholder.svg"}
+              src={`/cankayaLogo.jpg`}
               alt={companyInfo.name}
-              width={32}
               height={32}
-              className="w-8 h-8 rounded-full object-cover"
+              width={0}
+              style={{
+                width: "230px",
+                height: "40px",
+              }}
+              className=""
             />
             ) : (
               <div className="w-6 h-6 bg-primary rounded-full"></div>
             )}
-            <h2 className="text-lg font-semibold">{companyInfo?.name || "Menü"}</h2>
+            <h2 className="text-lg font-semibold">{companyInfo?.name || ""}</h2>
           </div>
           <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
             <X className="h-5 w-5" />
           </Button>
         </div>
 
-        <div className="flex flex-col p-4 space-y-4">
+        <div className="flex flex-col p-4 space-y-4 bg-white dark:bg-black shadow-lg">
           {/* User Info Section */}
           {user && (
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">

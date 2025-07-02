@@ -5,16 +5,30 @@ export async function GET(req, { params }) {
   const { id } = await params
   const baseDir = "C:/BeautySalon/CompanyIcon"
   let filePath = path.join(baseDir, `${id}.png`)
+  
   if (!fs.existsSync(filePath)) {
     filePath = path.join(baseDir, `${id}.jpeg`)
     if (!fs.existsSync(filePath)) {
-      return new Response("Not found", { status: 404 })
+      filePath = path.join(baseDir, `${id}.jpg`)
+      if (!fs.existsSync(filePath)) {
+        return new Response("Not found", { status: 404 })
+      }
     }
   }
+  
   const fileBuffer = fs.readFileSync(filePath)
+  const stats = fs.statSync(filePath)
   const ext = path.extname(filePath).toLowerCase()
   const contentType = ext === ".png" ? "image/png" : "image/jpeg"
+  
   return new Response(fileBuffer, {
-    headers: { "Content-Type": contentType }
+    headers: { 
+      "Content-Type": contentType,
+      "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+      "Pragma": "no-cache",
+      "Expires": "0",
+      "Last-Modified": stats.mtime.toUTCString(),
+      "ETag": `"${stats.mtime.getTime()}"`
+    }
   })
 } 

@@ -108,8 +108,8 @@ export default function ServicesPage() {
     })
 
     if (service.image) {
-      // Cache busting ile güncel resmi al
-      const imageUrl = `/api/service-image/${service._id}?v=${Date.now()}`
+      // Use service ID for cache busting instead of timestamp
+      const imageUrl = `/api/service-image/${service._id}?v=${service._id}`
       setCurrentImage(imageUrl)
     } else {
       setCurrentImage(null)

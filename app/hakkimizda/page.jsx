@@ -94,7 +94,7 @@ export default async function HakkimizdaPage() {
           </div>
           <div>
             <Image
-              src={aboutData.story.image || "/placeholder.svg"}
+              src={"/cankayaService.jpg"}
               alt="Salon Hikayesi"
               width={600}
               height={400}
@@ -158,9 +158,6 @@ export default async function HakkimizdaPage() {
             Salonumuzu ziyaret edin ve ekibimizle tanışın. Size özel hizmet sunmaktan mutluluk duyarız.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
-              Randevu Al
-            </button>
             <button className="border border-input bg-background px-8 py-3 rounded-lg font-semibold hover:bg-accent transition-colors">
               İletişime Geç
             </button>

@@ -53,39 +53,6 @@ export default function DashboardPage() {
     loadDashboardData()
   }, [])
 
-  const handleGalleryFormChange = (e) => {
-    const { name, value } = e.target
-    setGalleryForm((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleGalleryImageSave = (file) => {
-    setGalleryForm((prev) => ({ ...prev, image: file }))
-  }
-
-  const handleGalleryFormSubmit = async (e) => {
-    e.preventDefault()
-    setGalleryFormLoading(true)
-    // Burada backend'e gönderme işlemi yapılabilir
-    setTimeout(() => {
-      setGalleryImages((prev) => [
-        {
-          ...galleryForm,
-          id: Date.now(),
-          imageUrl: galleryForm.image ? URL.createObjectURL(galleryForm.image) : null,
-        },
-        ...prev,
-      ])
-      setGalleryForm({
-        category: GALLERY_CATEGORIES[0],
-        title: "",
-        description: "",
-        image: null,
-      })
-      setGalleryModalOpen(false)
-      setGalleryFormLoading(false)
-    }, 1000)
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen py-20">

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Phone, Calendar, User, LogOut } from "lucide-react"
+import { Phone, User, LogOut } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { MobileNav } from "@/components/mobile-nav"
 import { useAuth } from "@/contexts/AuthContext"
@@ -36,8 +36,8 @@ const navigationData = {
 export default function Header() {
   const { user, logout } = useAuth()
   const [companyInfo, setCompanyInfo] = useState({
-    name: "Güzellik Salonu",
-    phone: "+90 212 555 0123",
+    name: "",
+    phone: "",
     image: "",
   })
 
@@ -45,11 +45,13 @@ export default function Header() {
     const loadCompanyInfo = async () => {
       try {
         const info = await getCompanyInfo()
+        console.log(info)
         setCompanyInfo(info)
       } catch (error) {
         console.error("Company info loading error:", error)
       }
     }
+
     loadCompanyInfo()
   }, [])
 
@@ -66,15 +68,21 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             {companyInfo.image ? (
-              <Image
-              src={companyInfo.image ? `/api/company-icon/${companyInfo.image.replace(/\.(png|jpeg)$/i, '')}` : "/placeholder.svg"}
-              alt={companyInfo.name}
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-full object-cover"
-            />
+              <div className="relative h-8 mr-2">
+                <Image
+                  src={`/cankayaLogo.jpg`}
+                  alt={companyInfo.name}
+                  height={32}
+                  width={0}
+                  style={{
+                    width: "230px",
+                    height: "40px",
+                  }}
+                  className=""
+                />
+              </div>
             ) : (
-              <div className="w-8 h-8 bg-primary rounded-full"></div>
+              <div className="w-8 h-8 bg-primary rounded-full mr-2"></div>
             )}
             <span className="font-bold text-xl">{companyInfo.name}</span>
           </Link>

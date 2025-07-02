@@ -31,7 +31,7 @@ export default async function GaleriPage() {
                     <div className="relative overflow-hidden">
                       <Image
                         key={`${item.id}-${item.picture}`}
-                        src={`/api/gallery/${item.picture}?t=${item.updatedAt || item.createdAt}` || "/placeholder.svg"}
+                        src={`/api/gallery/${item._id}?t=${item.updatedAt || item.createdAt}` || "/placeholder.svg"}
                         alt={item.title}
                         width={100}
                         height={100}
@@ -60,9 +60,6 @@ export default async function GaleriPage() {
             Profesyonel ekibimizle size özel güzellik deneyimi için randevu alın
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-primary-foreground text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary-foreground/90 transition-colors">
-              Randevu Al
-            </button>
             <button className="border border-primary-foreground text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary-foreground hover:text-primary transition-colors">
               İletişime Geç
             </button>

@@ -13,7 +13,7 @@ export const metadata = {
   description:
     "15 yıllık deneyimimizle güzelliğinize değer katıyoruz. Cilt bakımı, saç tasarımı, makyaj ve daha fazlası için randevu alın.",
   keywords: "güzellik salonu, cilt bakımı, saç kesimi, makyaj, nail art, İstanbul",
-    generator: 'v0.dev'
+    generator: 'Pengona'
 }
 
 export default function RootLayout({ children }) {

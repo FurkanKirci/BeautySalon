@@ -50,16 +50,20 @@ export default function Footer() {
             <div className="flex items-center space-x-2">
               {companyInfo?.image ? (
                 <Image
-                  src={companyInfo.image ? `/api/company-icon/${companyInfo.image.replace(/\.(png|jpeg)$/i, '')}` : "/placeholder.svg"}
+                  src={`/cankayaLogo.jpg`}
                   alt={companyInfo.name}
-                  width={32}
                   height={32}
-                  className="w-8 h-8 rounded-full object-cover"
+                  width={0}
+                  style={{
+                    width: "230px",
+                    height: "40px",
+                  }}
+                  className=""
                 />
               ) : (
                 <div className="w-8 h-8 bg-primary rounded-full"></div>
               )}
-              <span className="font-bold text-xl">{companyInfo?.name || "Güzellik Salonu"}</span>
+              <span className="font-bold text-xl">{companyInfo?.name || ""}</span>
             </div>
             <p className="text-sm text-muted-foreground">
               {companyInfo?.description ||
@@ -155,7 +159,7 @@ export default function Footer() {
 
         <div className="border-t mt-8 pt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            © 2024 {companyInfo?.name || "Güzellik Salonu"}. Tüm hakları saklıdır.
+            © 2024 {companyInfo?.name || ""} Tüm hakları saklıdır.
           </p>
         </div>
       </div>
