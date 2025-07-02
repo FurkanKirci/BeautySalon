@@ -28,6 +28,7 @@ export default function GalleryDashboardPage() {
   const [editingImage, setEditingImage] = useState(null)
   const [currentImage, setCurrentImage] = useState(null)
   const [imageFile, setImageFile] = useState(null)
+  const [imageVersion, setImageVersion] = useState(Date.now())
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -42,7 +43,8 @@ export default function GalleryDashboardPage() {
   const loadGallery = async () => {
     try {
       const data = await getGallery()
-      setGallery(data)
+      // Force re-render by creating new array
+      setGallery([...data])
     } catch (error) {
       console.error("Gallery loading error:", error)
     } finally {
@@ -76,8 +78,12 @@ export default function GalleryDashboardPage() {
         await addGalleryImage({ ...formData, imageFile })
       }
 
-      await loadGallery()
-      resetForm()
+      // Daha uzun bir gecikme ve force reload
+      setTimeout(async () => {
+        setImageVersion(Date.now()) // Force image refresh
+        await loadGallery()
+        resetForm()
+      }, 500)
     } catch (error) {
       console.error("Gallery save error:", error)
     }
@@ -125,6 +131,11 @@ export default function GalleryDashboardPage() {
     setCurrentImage(null)
     setEditingImage(null)
     setShowForm(false)
+    
+    // Force re-render of gallery items to show updated images
+    setTimeout(() => {
+      loadGallery()
+    }, 200)
   }
 
   if (loading) {
@@ -224,10 +235,10 @@ export default function GalleryDashboardPage() {
           {gallery.map((image) => (
             <Card key={image._id} className="group overflow-hidden">
               <CardContent className="p-0">
-                <p>{console.log(image)}</p>
                 <div className="relative">
                   <Image
-                    src={`/api/gallery/${image.picture}` || "/placeholder.svg"}
+                    key={`${image._id}-${image.picture}-${imageVersion}`}
+                    src={`/api/gallery/${image.picture}?v=${imageVersion}` || "/placeholder.svg"}
                     alt={image.title}
                     width={300}
                     height={400}
@@ -237,13 +248,6 @@ export default function GalleryDashboardPage() {
                     <Button size="sm" variant="secondary" onClick={() => handleEdit(image)}>
                       <Edit className="w-4 h-4" />
                     </Button>
-                    <Button
-                      size="sm"
-                      variant={image.isFeatured ? "default" : "secondary"}
-                      onClick={() => handleToggleFeatured(image._id, image.isFeatured)}
-                    >
-                      {image.isFeatured ? <Star className="w-4 h-4" /> : <StarOff className="w-4 h-4" />}
-                    </Button>
                     <Button size="sm" variant="destructive" onClick={() => handleDelete(image._id)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -252,12 +256,6 @@ export default function GalleryDashboardPage() {
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold text-lg truncate">{image.title}</h3>
-                    {image.isFeatured && (
-                      <Badge variant="default" className="flex items-center gap-1">
-                        <Star className="w-3 h-3" />
-                        Öne Çıkan
-                      </Badge>
-                    )}
                   </div>
                   <Badge variant="secondary" className="text-xs mb-2">
                     {image.category}

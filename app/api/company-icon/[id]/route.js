@@ -2,7 +2,7 @@ import fs from "fs"
 import path from "path"
 
 export async function GET(req, { params }) {
-  const { id } = params
+  const { id } = await params
   const baseDir = "C:/BeautySalon/CompanyIcon"
   let filePath = path.join(baseDir, `${id}.png`)
   if (!fs.existsSync(filePath)) {

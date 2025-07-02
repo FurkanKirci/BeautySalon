@@ -30,7 +30,8 @@ export default async function GaleriPage() {
                   <CardContent className="p-0">
                     <div className="relative overflow-hidden">
                       <Image
-                        src={`/api/gallery/${item.picture}` || "/placeholder.svg"}
+                        key={`${item.id}-${item.picture}`}
+                        src={`/api/gallery/${item.picture}?t=${item.updatedAt || item.createdAt}` || "/placeholder.svg"}
                         alt={item.title}
                         width={100}
                         height={100}

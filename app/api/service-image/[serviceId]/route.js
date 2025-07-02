@@ -7,21 +7,26 @@ const UPLOAD_DIR = 'C:/BeautySalon/ServicePhotos'
 
 export async function GET(request, { params }) {
   try {
-    const { serviceId } = params
+    const { serviceId } = await params
     const fileName = `${serviceId}.png`
     const filePath = join(UPLOAD_DIR, fileName)
     
     if (!existsSync(filePath)) {
-      // Varsayılan placeholder resim döndür
+      // Dosya yoksa 404 döndür
       return new NextResponse(null, { status: 404 })
     }
     
     const imageBuffer = await readFile(filePath)
+    const stats = require('fs').statSync(filePath)
     
     return new NextResponse(imageBuffer, {
       headers: {
         'Content-Type': 'image/png',
-        'Cache-Control': 'public, max-age=31536000, immutable'
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Last-Modified': stats.mtime.toUTCString(),
+        'ETag': `"${stats.mtime.getTime()}"`
       }
     })
   } catch (error) {

@@ -15,7 +15,6 @@ export function ImageUpload({ onImageSave, currentImage }) {
   const [crop, setCrop] = useState({
     unit: "%",
     width: 50,
-    aspect: 1,
     x: 25,
     y: 25,
   })
@@ -41,7 +40,6 @@ export function ImageUpload({ onImageSave, currentImage }) {
           setCrop({
             unit: "%",
             width: 50,
-            aspect: 1,
             x: 25,
             y: 25,
           })
@@ -195,7 +193,6 @@ export function ImageUpload({ onImageSave, currentImage }) {
     setCrop({
       unit: "%",
       width: 50,
-      aspect: 1,
       x: 25,
       y: 25,
     })
@@ -218,7 +215,6 @@ export function ImageUpload({ onImageSave, currentImage }) {
                 crop={crop}
                 onChange={handleCropChange}
                 onComplete={handleCropComplete}
-                aspect={1}
                 minWidth={10}
                 minHeight={10}
                 keepSelection={true}

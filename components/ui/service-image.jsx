@@ -1,10 +1,17 @@
 'use client'
 
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function ServiceImage({ serviceId, serviceName, className = "", priority = false }) {
   const [imageError, setImageError] = useState(false)
+  const [imageVersion, setImageVersion] = useState(Date.now())
+
+  // Component mount olduğunda ve serviceId değiştiğinde image version'ı güncelle
+  useEffect(() => {
+    setImageVersion(Date.now())
+    setImageError(false)
+  }, [serviceId])
 
   if (imageError) {
     return (
@@ -21,7 +28,8 @@ export default function ServiceImage({ serviceId, serviceName, className = "", p
 
   return (
     <Image
-      src={`/api/service-image/${serviceId}`}
+      key={`${serviceId}-${imageVersion}`}
+      src={`/api/service-image/${serviceId}?v=${imageVersion}`}
       alt={serviceName || "Güzellik Salonu"}
       width={300}
       height={200}

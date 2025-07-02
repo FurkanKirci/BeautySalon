@@ -87,8 +87,11 @@ export default function ServicesPage() {
         await createService(serviceData)
       }
 
-      await loadServices()
-      resetForm()
+      // Kısa bir gecikme ile cache'in temizlenmesini sağla
+      setTimeout(async () => {
+        await loadServices()
+        resetForm()
+      }, 500)
     } catch (error) {
       console.error("Service save error:", error)
     }
@@ -105,7 +108,8 @@ export default function ServicesPage() {
     })
 
     if (service.image) {
-      const imageUrl = `/api/service-image/${service._id}`
+      // Cache busting ile güncel resmi al
+      const imageUrl = `/api/service-image/${service._id}?v=${Date.now()}`
       setCurrentImage(imageUrl)
     } else {
       setCurrentImage(null)
@@ -243,6 +247,7 @@ export default function ServicesPage() {
                     Hizmet Fotoğrafı (İsteğe bağlı)
                   </Label>
                   <ImageUpload
+                    key={`${editingService?._id || 'new'}-${currentImage ? 'has-image' : 'no-image'}`}
                     onImageSave={handleImageSave}
                     currentImage={currentImage}
                   />
@@ -283,21 +288,22 @@ export default function ServicesPage() {
               </CardHeader>
               <CardContent>
                 <div className="mb-4">
-                {service.image ? (
-                        <ServiceImage
-                          serviceId={service._id}
-                          serviceName={service.name}
-                          className="w-full h-full"
-                        />
-                      ) : (
-                        <Image
-                          src="/placeholder.svg"
-                          alt="Güzellik Salonu"
-                          width={300}
-                          height={200}
-                          className="w-full h-48 object-cover rounded-t-lg"
-                        />
-                      )}
+                  {service.image ? (
+                    <ServiceImage
+                      key={`${service._id}-${service.image}`}
+                      serviceId={service._id}
+                      serviceName={service.name}
+                      className="w-full h-48 object-cover rounded-t-lg"
+                    />
+                  ) : (
+                    <Image
+                      src="/placeholder.svg"
+                      alt="Güzellik Salonu"
+                      width={300}
+                      height={200}
+                      className="w-full h-48 object-cover rounded-t-lg"
+                    />
+                  )}
                 </div>
 
                 <CardDescription className="mb-4">{service.description}</CardDescription>
