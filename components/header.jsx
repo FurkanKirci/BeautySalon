@@ -45,7 +45,6 @@ export default function Header() {
     const loadCompanyInfo = async () => {
       try {
         const info = await getCompanyInfo()
-        console.log(info)
         setCompanyInfo(info)
       } catch (error) {
         console.error("Company info loading error:", error)
