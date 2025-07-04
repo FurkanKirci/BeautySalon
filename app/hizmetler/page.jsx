@@ -6,9 +6,11 @@ import Link from "next/link"
 import Image from "next/image"
 import { getServicesByCategory } from "@/lib/actions/services"
 import ServiceImage from "@/components/ui/service-image"
+import { getCompanyInfo } from "@/lib/actions/settings"
 
 export default async function HizmetlerPage() {
   const servicesByCategory = await getServicesByCategory()
+  const companyInfo = await getCompanyInfo()
 
   return (
     <div className="min-h-screen py-20">
@@ -44,7 +46,7 @@ export default async function HizmetlerPage() {
                         alt="Güzellik Salonu"
                         width={300}
                         height={200}
-                        className="w-full h-48 object-cover rounded-t-lg"
+                        className="w-full h-48 scale-down rounded-t-lg"
                       />
                     )}
                   </CardHeader>
@@ -65,7 +67,7 @@ export default async function HizmetlerPage() {
                       <div className="text-lg font-bold text-primary">₺{service.price}</div>
                     </div>
                     <Button className="w-full" asChild>
-                      <Link href="/randevu">Randevu Al</Link>
+                    <Link href={`tel:${companyInfo.phone.replace(/\s/g, "")}`}>Randevu Al</Link>
                     </Button>
                   </CardContent>
                 </Card>

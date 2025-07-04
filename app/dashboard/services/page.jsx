@@ -293,7 +293,7 @@ export default function ServicesPage() {
                       key={`${service._id}-${service.image}`}
                       serviceId={service._id}
                       serviceName={service.name}
-                      className="w-full h-48 object-cover rounded-t-lg"
+                      className="w-full h-48 scale-down rounded-t-lg"
                     />
                   ) : (
                     <Image

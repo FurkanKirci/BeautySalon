@@ -2,6 +2,7 @@ import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { getGallery } from "@/lib/actions/gallery"
+import Link from "next/link"
 
 export default async function GaleriPage() {
   const galleryData = await getGallery()
@@ -35,7 +36,7 @@ export default async function GaleriPage() {
                         alt={item.title}
                         width={100}
                         height={100}
-                        className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full aspect-square scale-down group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                         <div className="p-4 text-white">
@@ -61,7 +62,7 @@ export default async function GaleriPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="border border-primary-foreground text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary-foreground hover:text-primary transition-colors">
-              İletişime Geç
+              <Link href={`/iletisim`}>İletişime Geç</Link>
             </button>
           </div>
         </div>

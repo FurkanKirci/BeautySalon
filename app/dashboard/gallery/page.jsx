@@ -240,7 +240,7 @@ export default function GalleryDashboardPage() {
                     alt={image.title}
                     width={300}
                     height={400}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-64 scale-down"
                   />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
                     <Button size="sm" variant="secondary" onClick={() => handleEdit(image)}>

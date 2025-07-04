@@ -29,7 +29,7 @@ export default function ServiceImage({ serviceId, serviceName, className = "", p
         alt={serviceName || "Güzellik Salonu"}
         width={300}
         height={200}
-        className={`w-full h-[200px] scale-down rounded-t-lg ${className}`}
+        className={`w-full h-[200px] scale-down rounded-t-lg`}
         priority={priority}
       />
     )
@@ -45,7 +45,7 @@ export default function ServiceImage({ serviceId, serviceName, className = "", p
       alt={serviceName || "Güzellik Salonu"}
       width={300}
       height={200}
-      className={`w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-lg ${className}`}
+      className={`w-full h-[200px] scale-down group-hover:scale-105 transition-transform duration-300 rounded-t-lg ${className}`}
       onError={() => setImageError(true)}
       priority={priority}
       placeholder="blur"

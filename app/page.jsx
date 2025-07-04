@@ -17,7 +17,7 @@ const heroData = {
   subtitle: "Profesyonel güzellik hizmetleri ile kendinizi özel hissedin",
   description:
     "Modern teknikler ve deneyimli uzmanlarımızla güzelliğinizi ortaya çıkarın. Size özel bakım programları ile mükemmel sonuçlar elde edin.",
-  ctaText: "Randevu Al",
+  ctaText: "İletişime Geç",
   ctaSecondary: "Hizmetlerimizi Keşfedin",
 }
 
@@ -124,7 +124,7 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="text-lg px-8">
-                  <Link href="/randevu">{heroData.ctaText}</Link>
+                  <Link href="/iletisim">{heroData.ctaText}</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="text-lg px-8 bg-transparent">
                   <Link href="/hizmetler">{heroData.ctaSecondary}</Link>

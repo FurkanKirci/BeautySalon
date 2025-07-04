@@ -3,17 +3,28 @@ import path from "path"
 
 export async function GET(req, { params }) {
   const { id } = await params
-  const baseDir = "C:/BeautySalon/CompanyIcon"
-  let filePath = path.join(baseDir, `${id}.png`)
   
-  if (!fs.existsSync(filePath)) {
-    filePath = path.join(baseDir, `${id}.jpeg`)
-    if (!fs.existsSync(filePath)) {
-      filePath = path.join(baseDir, `${id}.jpg`)
-      if (!fs.existsSync(filePath)) {
-        return new Response("Not found", { status: 404 })
-      }
+  // Environment variables for upload paths
+  const UPLOAD_BASE_DIR = process.env.UPLOAD_BASE_DIR || 'uploads'
+  const COMPANY_ICON_DIR = process.env.COMPANY_ICON_DIR || 'company-icon'
+  
+  // Get base directory
+  const baseDir = path.join(UPLOAD_BASE_DIR, COMPANY_ICON_DIR)
+  
+  // Try different file extensions
+  const extensions = ['png', 'jpeg', 'jpg']
+  let filePath = null
+  
+  for (const ext of extensions) {
+    const testPath = path.join(baseDir, `${id}.${ext}`)
+    if (fs.existsSync(testPath)) {
+      filePath = testPath
+      break
     }
+  }
+  
+  if (!filePath) {
+    return new Response("Not found", { status: 404 })
   }
   
   const fileBuffer = fs.readFileSync(filePath)
