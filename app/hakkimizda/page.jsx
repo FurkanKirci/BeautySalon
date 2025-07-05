@@ -94,7 +94,7 @@ export default async function HakkimizdaPage() {
           </div>
           <div>
             <Image
-              src={"/cankayaService.jpg"}
+              src={"/CankayaService.jpg"}
               alt="Salon Hikayesi"
               width={600}
               height={400}

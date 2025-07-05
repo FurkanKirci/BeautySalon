@@ -10,6 +10,7 @@ import ServiceImage from "@/components/ui/service-image"
 import { getServices } from "@/lib/actions/services"
 import { getCompanyInfo } from "@/lib/actions/settings"
 import { useEffect, useState } from "react"
+import Script from "next/script"
 
 // Static data that doesn't change often
 const heroData = {
@@ -86,6 +87,20 @@ export default function HomePage() {
 
   const featuredServices = services.slice(0, 4) // Show first 4 services
 
+  // Breadcrumb structured data
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Ana Sayfa",
+        "item": process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+      }
+    ]
+  }
+
   // Show loading state
   if (loading) {
     return (
@@ -99,7 +114,13 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <>
+      <Script
+        id="breadcrumb-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+      />
+      <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-background via-background to-muted py-20 lg:py-8">
         <div className="flex justify-center items-center mb-10">
@@ -133,7 +154,7 @@ export default function HomePage() {
             </div>
             <div className="relative">
               <NextImage
-                src="/cankayaMain.jpg"
+                src="/CankayaMain.jpg"
                 alt="Güzellik Salonu"
                 width={500}
                 height={600}
@@ -258,5 +279,6 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

@@ -1,0 +1,27 @@
+{
+  "name": "Çankaya Güzellik Salonu",
+  "short_name": "Çankaya Salon",
+  "description": "Profesyonel güzellik hizmetleri - Cilt bakımı, saç tasarımı, makyaj ve daha fazlası",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/cankayaLogo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/cankayaLogo.jpg", 
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["beauty", "health", "lifestyle"],
+  "lang": "tr",
+  "dir": "ltr"
+} 

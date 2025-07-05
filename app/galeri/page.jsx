@@ -1,17 +1,28 @@
+"use client"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { getGallery } from "@/lib/actions/gallery"
 import Link from "next/link"
 
-export default async function GaleriPage() {
-  const galleryData = await getGallery()
+export default function GaleriPage() {
+  const [categories, setCategories] = useState({})
   // Kategorilere göre grupla
-  const categories = {}
-  for (const item of galleryData) {
-    if (!categories[item.category]) categories[item.category] = []
-    categories[item.category].push(item)
-  }
+  
+  useEffect(() => {
+    const fetchGallery = async () => {
+      const galleryData = await getGallery()
+      const categoriesData = {}
+      for (const item of galleryData) {
+        if (!categoriesData[item.category]) categoriesData[item.category] = []
+        categoriesData[item.category].push(item)
+      }
+      setCategories(categoriesData)
+    }
+    fetchGallery()
+    
+  }, [])
   return (
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">

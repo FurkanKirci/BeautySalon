@@ -10,7 +10,7 @@ export async function GET(req, { params }) {
   
   // Get base directory
   const baseDir = path.join(UPLOAD_BASE_DIR, SERVICE_PHOTOS_DIR)
-  
+  console.log(baseDir);
   // Try different file extensions
   const extensions = ['png', 'jpeg', 'jpg']
   let filePath = null
