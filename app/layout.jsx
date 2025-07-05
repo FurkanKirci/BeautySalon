@@ -22,7 +22,7 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3050'),
   alternates: {
     canonical: '/',
   },
@@ -80,9 +80,9 @@ export default function RootLayout({ children }) {
     "@type": "BeautySalon",
     "name": "Çankaya Güzellik Salonu",
     "description": "15 yıllık deneyimimizle güzelliğinize değer katıyoruz. Cilt bakımı, saç tasarımı, makyaj, nail art ve daha fazlası için randevu alın.",
-    "url": process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
-    "logo": `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/cankayaLogo.jpg`,
-    "image": `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/CankayaMain.jpg`,
+    "url": process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3050',
+    "logo": `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3050'}/cankayaLogo.jpg`,
+    "image": `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3050'}/CankayaMain.jpg`,
     "telephone": "+90 212 555 0123",
     "email": "info@cankayaguzellik.com",
     "address": {

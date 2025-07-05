@@ -1,0 +1,32 @@
+name: Deploy to Linux Server
+
+on:
+  push:
+    branches:
+      
+main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      
+name: Checkout repo
+      uses: actions/checkout@v3
+
+      
+name: Deploy to server via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          export NVM_DIR="/home/wm-web1/.nvm"
+          export PATH="/home/wm-web1/.nvm/versions/node/v22.17.0/bin:$PATH"
+          cd /home/wm-web1/Desktop/BeautySalon
+          git pull origin main
+          npm install
+          npm run build
+          pm2 restart cankayaguzellik

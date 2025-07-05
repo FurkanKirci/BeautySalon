@@ -96,7 +96,7 @@ export default function HomePage() {
         "@type": "ListItem",
         "position": 1,
         "name": "Ana Sayfa",
-        "item": process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+        "item": process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3050'
       }
     ]
   }

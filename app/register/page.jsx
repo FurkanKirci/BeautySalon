@@ -67,7 +67,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4">
+      {/* <div className="container mx-auto px-4">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4">Kayıt Ol</h1>
@@ -216,7 +216,7 @@ export default function RegisterPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

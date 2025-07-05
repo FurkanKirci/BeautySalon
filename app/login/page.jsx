@@ -174,12 +174,12 @@ export default function LoginPage() {
                   </Button>
 
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground">
+                    {/* <p className="text-sm text-muted-foreground">
                       {loginData.form.noAccount}{" "}
                       <Link href="/register" className="text-primary hover:underline">
                         {loginData.form.signUp}
                       </Link>
-                    </p>
+                    </p> */}
                   </div>
                 </form>
               </CardContent>
