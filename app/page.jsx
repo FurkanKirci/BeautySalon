@@ -137,7 +137,7 @@ export default function HomePage() {
             <div className="space-y-8">
               <div className="space-y-4">
                 <Badge variant="secondary" className="w-fit">
-                  Premium Güzellik Salonu
+                  Premium Güzellik Salonu Github Push
                 </Badge>
                 <h1 className="text-4xl lg:text-6xl font-bold leading-tight">{heroData.title}</h1>
                 <p className="text-xl text-muted-foreground">{heroData.subtitle}</p>
