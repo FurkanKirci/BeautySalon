@@ -15,7 +15,7 @@ import { useAuth } from "@/contexts/AuthContext"
 // JSON Data for Login Page
 const loginData = {
   title: "Giriş Yap",
-  subtitle: "Hesabınıza giriş yaparak özel hizmetlerimizden faydalanın",
+  subtitle: "",
   form: {
     emailLabel: "E-posta",
     emailPlaceholder: "E-posta adresinizi girin",
@@ -187,27 +187,9 @@ export default function LoginPage() {
 
             {/* Benefits */}
             <div className="space-y-8">
-              <div>
-                <h2 className="text-2xl font-bold mb-6">Üye Olmanın Avantajları</h2>
-                <div className="space-y-4">
-                  {loginData.benefits.map((benefit, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <p className="text-muted-foreground">{benefit}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              
 
-              <Card className="bg-muted/50">
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-2">Yeni Üye Fırsatı</h3>
-                  <p className="text-sm text-muted-foreground mb-4">İlk randevunuzda %20 indirim kazanın!</p>
-                  <Button asChild variant="outline" className="w-full bg-transparent">
-                    <Link href="/register">Hemen Kayıt Ol</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+              
 
               <div className="bg-primary/10 rounded-lg p-6">
                 <h3 className="font-semibold mb-2">Güvenli Giriş</h3>

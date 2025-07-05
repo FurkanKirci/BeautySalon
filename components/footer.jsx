@@ -159,7 +159,7 @@ export default function Footer() {
 
         <div className="border-t mt-8 pt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            © 2024 {companyInfo?.name || ""} Tüm hakları saklıdır.
+            © 2025 <Link href="https://www.pengona.com" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Pengona.com</Link> Tüm hakları saklıdır.
           </p>
         </div>
       </div>

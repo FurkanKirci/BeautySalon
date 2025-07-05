@@ -319,7 +319,7 @@ export default function IletisimPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Telefon, WhatsApp veya online randevu sistemimiz üzerinden kolayca randevu alabilirsiniz.
+                  Telefon veya WhatsApp üzerinden kolayca randevu alabilirsiniz.
                 </p>
               </CardContent>
             </Card>
